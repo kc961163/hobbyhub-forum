@@ -8,7 +8,7 @@ import EditPost from './pages/EditPost';
 import Header from './components/layout/Header';
 import Footer from './components/layout/Footer';
 import { getCurrentUser } from './services/authService';
-import './index.css';
+import './styles/main.css'; // Import our custom CSS instead of Tailwind
 
 function App() {
   const [userId, setUserId] = useState(null);
@@ -24,15 +24,17 @@ function App() {
   
   return (
     <Router>
-      <div className="min-h-screen flex flex-col bg-gray-50">
+      <div className="app-container">
         <Header />
-        <main className="flex-grow container mx-auto px-4 py-8">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/create" element={<CreatePost />} />
-            <Route path="/post/:id" element={<PostDetail />} />
-            <Route path="/post/:id/edit" element={<EditPost />} />
-          </Routes>
+        <main>
+          <div className="container">
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/create" element={<CreatePost />} />
+              <Route path="/post/:id" element={<PostDetail />} />
+              <Route path="/post/:id/edit" element={<EditPost />} />
+            </Routes>
+          </div>
         </main>
         <Footer />
       </div>

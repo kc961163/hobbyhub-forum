@@ -8,47 +8,45 @@ const Button = ({
   size = 'medium',
   disabled = false,
   type = 'button',
-  fullWidth = false
+  className = ''
 }) => {
-  // Define styles based on variant and size
-  let variantClasses = '';
+  // Define variant and size classes
+  let variantClass = '';
+  let sizeClass = '';
   
+  // Set variant class
   switch(variant) {
     case 'primary':
-      variantClasses = 'bg-blue-600 hover:bg-blue-700 text-white';
+      variantClass = 'btn-primary';
       break;
     case 'secondary':
-      variantClasses = 'bg-gray-200 hover:bg-gray-300 text-gray-800';
+      variantClass = 'btn-secondary';
       break;
     case 'danger':
-      variantClasses = 'bg-red-600 hover:bg-red-700 text-white';
+      variantClass = 'btn-danger';
       break;
     default:
-      variantClasses = 'bg-blue-600 hover:bg-blue-700 text-white';
+      variantClass = 'btn-primary';
   }
   
-  let sizeClasses = '';
-  
+  // Set size class
   switch(size) {
     case 'small':
-      sizeClasses = 'py-1 px-3 text-sm';
-      break;
-    case 'medium':
-      sizeClasses = 'py-2 px-4';
+      sizeClass = 'btn-sm';
       break;
     case 'large':
-      sizeClasses = 'py-3 px-6 text-lg';
+      sizeClass = 'btn-lg';
       break;
     default:
-      sizeClasses = 'py-2 px-4';
+      sizeClass = '';
   }
   
-  const widthClass = fullWidth ? 'w-full' : '';
+  const buttonClasses = `btn ${variantClass} ${sizeClass} ${className}`;
   
   return (
     <button
       type={type}
-      className={`${variantClasses} ${sizeClasses} ${widthClass} rounded font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors`}
+      className={buttonClasses}
       onClick={onClick}
       disabled={disabled}
     >

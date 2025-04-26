@@ -10,16 +10,16 @@ const Input = ({
   placeholder,
   required = false,
   error,
-  fullWidth = true
+  className = ''
 }) => {
   return (
-    <div className={`mb-4 ${fullWidth ? 'w-full' : ''}`}>
+    <div className={`form-group ${className}`}>
       {label && (
         <label 
           htmlFor={id} 
-          className="block text-sm font-medium text-gray-700 mb-1"
+          className="form-label"
         >
-          {label} {required && <span className="text-red-600">*</span>}
+          {label} {required && <span className="text-danger">*</span>}
         </label>
       )}
       <input
@@ -29,9 +29,9 @@ const Input = ({
         onChange={onChange}
         placeholder={placeholder}
         required={required}
-        className={`px-3 py-2 border ${error ? 'border-red-500' : 'border-gray-300'} rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 block w-full`}
+        className={`form-control ${error ? 'border-danger' : ''}`}
       />
-      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+      {error && <p className="mt-1 text-sm text-danger">{error}</p>}
     </div>
   );
 };
