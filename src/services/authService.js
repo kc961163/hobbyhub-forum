@@ -1,6 +1,6 @@
 // src/services/authService.js
 import { v4 as uuidv4 } from 'uuid';
-import { supabase } from './supabase';
+import { supabase, setSupabaseUserContext } from './supabase';
 
 // Generate a random user ID
 export const generateUserId = () => {
@@ -42,6 +42,9 @@ export const getCurrentUser = async () => {
     userId = generateUserId();
     await storeUser(userId);
   }
+  
+  // Set the user ID in Supabase context for RLS policies
+  await setSupabaseUserContext(userId);
   
   return userId;
 };
