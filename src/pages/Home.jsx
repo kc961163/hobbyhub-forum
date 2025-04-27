@@ -168,11 +168,9 @@ const Home = () => {
     <Link to="/create" className="btn btn-primary mt-4">Create Post</Link>
   </div>
 ) : (
-  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
   {posts.map(post => (
-    <div key={post.id} className="h-full"> {/* Add wrapper with h-full */}
-      <PostCard post={post} />
-    </div>
+    <PostCard key={post.id} post={post} />
   ))}
 </div>
 )}
