@@ -44,10 +44,16 @@ const PostDetail = () => {
   const handleUpvote = async () => {
     try {
       const updatedPost = await upvotePost(id);
+      if (!updatedPost) {
+        console.error('Upvote returned no post data');
+        setError('Failed to upvote post. Please try again.');
+        return;
+      }
+      console.log('Updated post:', updatedPost); // Debug logging
       setPost(updatedPost);
     } catch (err) {
-      console.error('Error upvoting post:', err);
-      setError('Failed to upvote post. Please try again.');
+      console.error('Error upvoting post:', err.message || err);
+      setError(`Failed to upvote post: ${err.message || 'Unknown error'}`);
     }
   };
   

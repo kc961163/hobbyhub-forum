@@ -44,22 +44,32 @@ export const getPosts = async (sortBy = 'created_at', sortOrder = 'desc') => {
 
 // Get a single post by ID
 export const getPostById = async (postId) => {
-  const { data, error } = await supabase
-    .from('posts')
-    .select('*')
-    .eq('id', postId)
-    .single();
-  
-  if (error) {
-    console.error('Error fetching post:', error);
+  try {
+    const { data, error } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('id', postId)
+      .single();
+    
+    if (error) {
+      console.error('Error fetching post:', error);
+      throw error;
+    }
+    
+    if (!data) {
+      throw new Error('Post not found');
+    }
+    
+    return data;
+  } catch (error) {
+    console.error('Error in getPostById:', error.message || error);
     throw error;
   }
-  
-  return data;
 };
 
-// Update a post
+// Update a post - simplified version
 export const updatePost = async (postId, postData) => {
+  // Perform the update
   const { data, error } = await supabase
     .from('posts')
     .update({
@@ -77,11 +87,49 @@ export const updatePost = async (postId, postData) => {
     throw error;
   }
   
+  if (!data || data.length === 0) {
+    // If update succeeded but no data returned, fetch the post
+    const { data: fetchedPost, error: fetchError } = await supabase
+      .from('posts')
+      .select('*')
+      .eq('id', postId)
+      .single();
+      
+    if (fetchError) {
+      throw fetchError;
+    }
+    
+    return fetchedPost;
+  }
+  
   return data[0];
 };
 
 // Delete a post
 export const deletePost = async (postId) => {
+  const userId = await getCurrentUser();
+  
+  // First check if post exists and user is the author
+  const { data: post, error: fetchError } = await supabase
+    .from('posts')
+    .select('author_id')
+    .eq('id', postId)
+    .single();
+  
+  if (fetchError) {
+    console.error('Error fetching post for deletion:', fetchError);
+    throw fetchError;
+  }
+  
+  if (!post) {
+    throw new Error('Post not found');
+  }
+  
+  if (post.author_id !== userId) {
+    throw new Error('Unauthorized: You can only delete your own posts');
+  }
+  
+  // Now perform the delete
   const { error } = await supabase
     .from('posts')
     .delete()
@@ -95,28 +143,35 @@ export const deletePost = async (postId) => {
   return true;
 };
 
-// Upvote a post
+// Upvote a post - fixed version
 export const upvotePost = async (postId) => {
-  // Get the current post to get the current upvote count
-  const { data: post } = await supabase
+  // Get the current post with ALL fields
+  const { data: post, error: fetchError } = await supabase
     .from('posts')
-    .select('upvotes')
+    .select('*')  // Select ALL fields
     .eq('id', postId)
     .single();
+  
+  if (fetchError) {
+    console.error('Error fetching post for upvote:', fetchError);
+    throw fetchError;
+  }
   
   if (!post) {
     throw new Error('Post not found');
   }
   
-  // Increment the upvote count
+  // Safely increment the upvote count
+  const currentUpvotes = post.upvotes || 0;
+  
   const { data, error } = await supabase
     .from('posts')
-    .update({ upvotes: post.upvotes + 1 })
+    .update({ upvotes: currentUpvotes + 1 })
     .eq('id', postId)
-    .select();
+    .select('*');  // Make sure to select ALL fields here too
   
   if (error) {
-    console.error('Error upvoting post:', error);
+    console.error('Error updating upvotes:', error);
     throw error;
   }
   

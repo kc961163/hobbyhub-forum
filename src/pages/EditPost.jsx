@@ -135,7 +135,6 @@ const EditPost = () => {
     setIsSubmitting(true);
     
     try {
-      // Format the data for the update function
       const postData = {
         title: formData.title,
         content: formData.content,
@@ -143,15 +142,21 @@ const EditPost = () => {
         flags: formData.flags
       };
       
-      await updatePost(id, postData);
+      const updatedPost = await updatePost(id, postData);
+      console.log('Updated post response:', updatedPost); // Debug logging
+      
+      if (!updatedPost) {
+        throw new Error('No response received from update operation');
+      }
+      
       setIsSubmitting(false);
       navigate(`/post/${id}`);
     } catch (error) {
-      console.error('Error updating post:', error);
+      console.error('Error updating post:', error.message || error);
       setIsSubmitting(false);
       setErrors({
         ...errors,
-        submit: 'Failed to update post. Please try again.'
+        submit: `Failed to update post: ${error.message || 'Unknown error'}`
       });
     }
   };
