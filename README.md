@@ -1,130 +1,99 @@
-# HobbyHub Forum
+# Web Development Final Project - *Name of App Here*
 
-A React-based community platform for hobby enthusiasts to share posts, discuss ideas, and connect with like-minded individuals.
+Submitted by: **Your Name Here**
 
-## 📋 Overview
+This web app: **insert description**
 
-HobbyHub is an interactive forum where users can create posts about their favorite hobbies, upvote content they enjoy, and engage in discussions through comments. The application provides a seamless experience for content creation, discovery, and interaction.
+Time spent: **X** hours spent in total
 
-## ✨ Features
+## Required Features
 
-- **User Authentication**: Anonymous user identification with UUID-based tracking
-- **Post Management**:
-  - Create posts with title, content, and image URL
-  - Edit and delete your own posts
-  - Upvote posts you find valuable
-- **Content Discovery**:
-  - Browse a feed of all community posts
-  - Sort posts by creation time or popularity (upvotes)
-  - Search for posts by title
-  - Filter posts by categories/flags
-- **Commenting System**:
-  - Leave comments on posts
-  - View discussions under each post
-- **Responsive Design**:
-  - Optimized for both desktop and mobile viewing
+The following **required** functionality is completed:
 
-## 🛠️ Technologies
 
-- **Frontend**:
-  - React 19
-  - React Router 7
-  - Tailwind CSS
-- **Backend**:
-  - Supabase (BaaS)
-  - PostgreSQL Database
-- **Development**:
-  - Vite
-  - ESLint
-  - PostCSS
+- [ ] **Web app includes a create form that allows the user to create posts**
+  - Form requires users to add a post title
+  - Forms should have the *option* for users to add: 
+    - additional textual content
+    - an image added as an external image URL
+- [ ] **Web app includes a home feed displaying previously created posts**
+  - Web app must include home feed displaying previously created posts
+  - By default, each post on the posts feed should show only the post's:
+    - creation time
+    - title 
+    - upvotes count
+  - Clicking on a post should direct the user to a new page for the selected post
+- [ ] **Users can view posts in different ways**
+  - Users can sort posts by either:
+    -  creation time
+    -  upvotes count
+  - Users can search for posts by title
+- [ ] **Users can interact with each post in different ways**
+  - The app includes a separate post page for each created post when clicked, where any additional information is shown, including:
+    - content
+    - image
+    - comments
+  - Users can leave comments underneath a post on the post page
+  - Each post includes an upvote button on the post page. 
+    - Each click increases the post's upvotes count by one
+    - Users can upvote any post any number of times
 
-## 🚀 Getting Started
+- [ ] **A post that a user previously created can be edited or deleted from its post pages**
+  - After a user creates a new post, they can go back and edit the post
+  - A previously created post can be deleted from its post page
 
-### Prerequisites
+The following **optional** features are implemented:
 
-- Node.js (v16+)
-- npm or yarn
-- Supabase account for backend services
 
-### Installation
+- [ ] Web app implements pseudo-authentication
+  - Users can only edit and delete posts or delete comments by entering the secret key, which is set by the user during post creation
+  - **or** upon launching the web app, the user is assigned a random user ID. It will be associated with all posts and comments that they make and displayed on them
+  - For both options, only the original user author of a post can update or delete it
+- [ ] Users can repost a previous post by referencing its post ID. On the post page of the new post
+  - Users can repost a previous post by referencing its post ID
+  - On the post page of the new post, the referenced post is displayed and linked, creating a thread
+- [ ] Users can customize the interface
+  - e.g., selecting the color scheme or showing the content and image of each post on the home feed
+- [ ] Users can add more characterics to their posts
+  - Users can share and view web videos
+  - Users can set flags such as "Question" or "Opinion" while creating a post
+  - Users can filter posts by flags on the home feed
+  - Users can upload images directly from their local machine as an image file
+- [ ] Web app displays a loading animation whenever data is being fetched
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/yourusername/hobbyhub-forum.git
-   cd hobbyhub-forum
-   ```
+The following **additional** features are implemented:
 
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
+* [ ] List anything else that you added to improve the site's functionality!
 
-3. Create a `.env` file in the root directory with your Supabase credentials:
-   ```
-   VITE_SUPABASE_URL=your_supabase_url
-   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
+## Video Walkthrough
 
-4. Start the development server:
-   ```bash
-   npm run dev
-   ```
+Here's a walkthrough of implemented user stories:
 
-5. Open your browser and navigate to `http://localhost:5173/`
+<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
 
-## 📊 Database Schema
+<!-- Replace this with whatever GIF tool you used! -->
+GIF created with ...  
+<!-- Recommended tools:
+[Kap](https://getkap.co/) for macOS
+[ScreenToGif](https://www.screentogif.com/) for Windows
+[peek](https://github.com/phw/peek) for Linux. -->
 
-### Posts Table
-- `id`: UUID (primary key)
-- `title`: String (required)
-- `content`: Text
-- `image_url`: String
-- `author_id`: UUID (foreign key to user_preferences)
-- `upvotes`: Integer (default: 0)
-- `flags`: Array of strings
-- `created_at`: Timestamp
-- `updated_at`: Timestamp
+## Notes
 
-### Comments Table
-- `id`: UUID (primary key)
-- `post_id`: UUID (foreign key to posts)
-- `content`: Text (required)
-- `author_id`: UUID (foreign key to user_preferences)
-- `created_at`: Timestamp
+Describe any challenges encountered while building the app.
 
-### User Preferences Table
-- `user_id`: UUID (primary key)
-- `secret_key`: String
-- `created_at`: Timestamp
+## License
 
-## 🌟 Stretch Features
+    Copyright [yyyy] [name of copyright owner]
 
-- Post flags for categorization (Question/Opinion)
-- Custom theming options
-- Rich text editor for post content
-- Direct image uploads from local machine
-- Loading animations
-- Post reposting/threading functionality
+    Licensed under the Apache License, Version 2.0 (the "License");
+    you may not use this file except in compliance with the License.
+    You may obtain a copy of the License at
 
-## 🔧 Project Structure
+        http://www.apache.org/licenses/LICENSE-2.0
 
-```
-hobbyhub/
-├── public/
-├── src/
-│   ├── assets/        # Static assets
-│   ├── components/    # Reusable UI components
-│   │   ├── layout/    # Layout components
-│   │   └── ui/        # UI elements
-│   ├── context/       # React context providers
-│   ├── pages/         # Page components
-│   ├── services/      # API and backend services
-│   ├── styles/        # Global styles and themes
-│   └── utils/         # Utility functions
-├── .env               # Environment variables
-└── ...                # Config files
-```
-
-## 📝 License
-
-[MIT](LICENSE)
+    Unless required by applicable law or agreed to in writing, software
+    distributed under the License is distributed on an "AS IS" BASIS,
+    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    See the License for the specific language governing permissions and
+    limitations under the License.
