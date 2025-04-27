@@ -12,13 +12,18 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
 export const setSupabaseUserContext = async (userId) => {
   try {
-    // Set the user ID in the Supabase connection context
-    await supabase.rpc('set_user_context', {
+    const { error } = await supabase.rpc('set_user_context', {
       user_id: userId
     });
+    
+    if (error) {
+      console.error('Error setting user context:', error);
+      return false;
+    }
+    
     return true;
   } catch (error) {
-    console.error('Error setting user context:', error);
+    console.error('Exception setting user context:', error);
     return false;
   }
 };

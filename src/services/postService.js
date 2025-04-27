@@ -145,37 +145,16 @@ export const deletePost = async (postId) => {
 
 // Upvote a post - fixed version
 export const upvotePost = async (postId) => {
-  // Get the current post with ALL fields
-  const { data: post, error: fetchError } = await supabase
+  await supabase.rpc('increment_upvotes', { post_id: postId });
+  
+  // Fetch and return the updated post
+  const { data } = await supabase
     .from('posts')
-    .select('*')  // Select ALL fields
+    .select('*')
     .eq('id', postId)
     .single();
   
-  if (fetchError) {
-    console.error('Error fetching post for upvote:', fetchError);
-    throw fetchError;
-  }
-  
-  if (!post) {
-    throw new Error('Post not found');
-  }
-  
-  // Safely increment the upvote count
-  const currentUpvotes = post.upvotes || 0;
-  
-  const { data, error } = await supabase
-    .from('posts')
-    .update({ upvotes: currentUpvotes + 1 })
-    .eq('id', postId)
-    .select('*');  // Make sure to select ALL fields here too
-  
-  if (error) {
-    console.error('Error updating upvotes:', error);
-    throw error;
-  }
-  
-  return data[0];
+  return data;
 };
 
 // Search posts by title

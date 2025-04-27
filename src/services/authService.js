@@ -69,3 +69,4 @@ export const getUserPreferences = async (userId) => {
   
   return data;
 };
+
