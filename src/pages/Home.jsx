@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import { getPosts, searchPosts, filterPostsByFlag } from '../services/postService';
 import Button from '../components/ui/Button';
 import { formatDistanceToNow } from 'date-fns';
+import PostCard from '../components/PostCard';
+import Loading from '../components/ui/Loading';
 
 const Home = () => {
   const [posts, setPosts] = useState([]);
@@ -156,48 +158,24 @@ const Home = () => {
         </div>
       )}
 
-      {loading ? (
-        <div className="text-center py-8">
-          <p>Loading posts...</p>
-        </div>
-      ) : posts.length === 0 ? (
-        <div className="text-center py-8 bg-gray-50 rounded">
-          <p className="text-gray-500">No posts found. Be the first to create one!</p>
-        </div>
-      ) : (
-        <div className="grid gap-4">
-          {posts.map(post => (
-            <Link 
-              to={`/post/${post.id}`} 
-              key={post.id}
-              className="block bg-white p-4 rounded shadow hover:shadow-md transition"
-            >
-              <div className="flex justify-between items-start">
-                <h2 className="text-xl font-semibold">{post.title}</h2>
-                <div className="flex items-center text-gray-500">
-                  <span className="mr-1">👍</span>
-                  <span>{post.upvotes}</span>
-                </div>
-              </div>
-              <div className="mt-2 text-sm text-gray-500">
-                Posted {formatDistanceToNow(new Date(post.created_at), { addSuffix: true })}
-              </div>
-              {post.flags && post.flags.length > 0 && (
-                <div className="mt-2 flex gap-2">
-                  {post.flags.map(flag => (
-                    <span 
-                      key={flag} 
-                      className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded"
-                    >
-                      {flag}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </Link>
-          ))}
-        </div>
-      )}
+{loading ? (
+  <div className="text-center py-8">
+    <Loading size="large" message="Loading posts..." />
+  </div>
+) : posts.length === 0 ? (
+  <div className="text-center py-8 bg-gray-50 rounded">
+    <p className="text-gray-500">No posts found. Be the first to create one!</p>
+    <Link to="/create" className="btn btn-primary mt-4">Create Post</Link>
+  </div>
+) : (
+  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+  {posts.map(post => (
+    <div key={post.id} className="h-full"> {/* Add wrapper with h-full */}
+      <PostCard post={post} />
+    </div>
+  ))}
+</div>
+)}
     </div>
   );
 };

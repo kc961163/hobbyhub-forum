@@ -10,6 +10,7 @@ const EditPost = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { userId } = useUser();
+  const [imagePreview, setImagePreview] = useState(null);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -22,6 +23,14 @@ const EditPost = () => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [unauthorizedError, setUnauthorizedError] = useState(false);
+
+  useEffect(() => {
+    if (formData.imageUrl && isValidUrl(formData.imageUrl)) {
+      setImagePreview(formData.imageUrl);
+    } else {
+      setImagePreview(null);
+    }
+  }, [formData.imageUrl]);
   
   useEffect(() => {
     fetchPost();
@@ -209,6 +218,29 @@ const EditPost = () => {
           error={errors.title}
           placeholder="Give your post a title"
         />
+
+{formData.imageUrl && (
+  <div className="mb-4">
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      Image Preview
+    </label>
+    {imagePreview ? (
+      <img 
+        src={imagePreview} 
+        alt="Preview" 
+        className="max-h-60 rounded border border-gray-300"
+        onError={() => {
+          setImagePreview(null);
+          setErrors({...errors, imageUrl: 'Unable to load image. Please check the URL.'});
+        }} 
+      />
+    ) : (
+      <div className="bg-gray-100 border border-gray-300 rounded p-4 text-center text-gray-500">
+        {formData.imageUrl ? 'Invalid image URL' : 'No image URL provided'}
+      </div>
+    )}
+  </div>
+)}
         
         <div className="mb-4">
           <label 

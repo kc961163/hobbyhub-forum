@@ -115,9 +115,15 @@ const PostDetail = () => {
           <h1 className="text-3xl font-bold">{post.title}</h1>
           
           <div className="flex items-center">
-            <Button onClick={handleUpvote} variant="secondary" size="small">
-              👍 {post.upvotes}
-            </Button>
+          <Button 
+            onClick={handleUpvote} 
+            variant="secondary" 
+            size="medium"
+            className="flex items-center"
+          >
+            <span role="img" aria-label="upvote" className="text-base mr-1">👍</span>
+            <span className="font-medium">{post.upvotes || 0}</span>
+          </Button>
             
             {isAuthor && (
               <div className="ml-4 flex">
