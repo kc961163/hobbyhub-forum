@@ -4,6 +4,7 @@ import React from 'react';
 const Input = ({ 
   label,
   id,
+  name,
   type = 'text',
   value,
   onChange,
@@ -27,7 +28,7 @@ const Input = ({
       )}
       <input
         id={id}
-        name={id} // Ensure name attribute matches id for handleChange
+        name={name || id} // Ensure name attribute matches id for handleChange
         type={type}
         value={value || ''} // Add fallback to prevent uncontrolled to controlled warning
         onChange={onChange}

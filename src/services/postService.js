@@ -69,16 +69,35 @@ export const getPostById = async (postId) => {
 
 // Update a post - simplified version
 export const updatePost = async (postId, postData) => {
+
+  const userId = await getCurrentUser();
+  
+  // First check if user is the author
+  const { data: post, error: fetchError } = await supabase
+    .from('posts')
+    .select('author_id')
+    .eq('id', postId)
+    .single();
+  
+  if (fetchError) throw fetchError;
+  if (!post) throw new Error('Post not found');
+  if (post.author_id !== userId) {
+    throw new Error('Unauthorized: You can only edit your own posts');
+  }
+
+  const updateData = {
+    title: postData.title,
+    content: postData.content || null,
+    image_url: postData.imageUrl || null, // Make sure this conversion is explicit
+    flags: postData.flags || [],
+    updated_at: new Date().toISOString() // Use ISO string format
+  };
+  
+  // console.log('Sending to Supabase:', updateData);
   // Perform the update
   const { data, error } = await supabase
     .from('posts')
-    .update({
-      title: postData.title,
-      content: postData.content || null,
-      image_url: postData.imageUrl || null,
-      flags: postData.flags || [],
-      updated_at: new Date()
-    })
+    .update(updateData)
     .eq('id', postId)
     .select();
   

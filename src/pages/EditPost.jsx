@@ -11,6 +11,13 @@ const EditPost = () => {
   const navigate = useNavigate();
   const { userId } = useUser();
   const [imagePreview, setImagePreview] = useState(null);
+
+  useEffect(() => {
+    // Only fetch the post when userId is available
+    if (userId) {
+      fetchPost();
+    }
+  }, [id, userId]);
   
   const [formData, setFormData] = useState({
     title: '',
@@ -31,13 +38,20 @@ const EditPost = () => {
       setImagePreview(null);
     }
   }, [formData.imageUrl]);
-  
+
   useEffect(() => {
+  // Only fetch the post when userId is available
+  if (userId) {
     fetchPost();
-  }, [id]);
+  }
+}, [id, userId]);
   
   const fetchPost = async () => {
     try {
+      // Early exit if no userId yet
+      if (!userId) {
+        return;
+      }
       const post = await getPostById(id);
       
       // Check if user is authorized to edit this post
@@ -142,24 +156,22 @@ const EditPost = () => {
         flags: formData.flags
       };
       
-      const updatedPost = await updatePost(id, postData);
-      console.log('Updated post response:', updatedPost); // Debug logging
+      // console.log('Sending update for post:', id, 'with data:', postData);
+      // console.log('Current user ID:', userId);
       
-      if (!updatedPost) {
-        throw new Error('No response received from update operation');
-      }
+      const updatedPost = await updatePost(id, postData);
       
       setIsSubmitting(false);
       navigate(`/post/${id}`);
     } catch (error) {
-      console.error('Error updating post:', error.message || error);
+      console.error('Error updating post:', error);
       setIsSubmitting(false);
       setErrors({
         ...errors,
         submit: `Failed to update post: ${error.message || 'Unknown error'}`
       });
     }
-  };
+  }
   
   if (loading) {
     return (
